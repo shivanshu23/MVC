@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+<h2>Enter Your Details</h2>
+
+<form>
+
+  First name:<br>
+  <input type="text" name="firstname" value="">
+  <br>
+  
+  Last name:<br>
+  <input type="text" name="lastname" value="">
+  <br>
+  
+  Address:<br>
+  <input type="text" name="address" value="">
+  
+  <br><br>
+  <input type="submit" onclick="myFunction()"  value="Submit">
+  
+  <input type="reset" value="Reset">
+ 
+  
+</form> 
+<br> <br>
+
+<table>
+
+<tr> First Name </tr>	&nbsp;&nbsp;
+<tr> Last Name </tr>	&nbsp;&nbsp;
+<tr> Address </tr>
+</table>
+
+<script>
+$(document).ready(function(){
+    $(":reset");
+});
+</script>
+
+<script>
+function myFunction() {
+    confirm("Are You Sure");
+     alert("Submitted Successfully");
+    
+}
+</script>
+
+
+l
+</body>
+</html>
+
+
+
+
