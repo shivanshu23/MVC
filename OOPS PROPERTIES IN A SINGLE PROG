@@ -1,0 +1,140 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace oops
+{
+
+
+    class overload
+    {
+        public int add(int n1, int n2)
+        {
+            return n1 + n2;
+        }
+
+        public int add(int n1, int n2, int n3)
+        {
+            return n1 + n2 + n3;
+        }
+
+    }
+
+
+
+    class parentClass
+    {
+        public virtual int operation(int num1, int num2)
+        {
+            return (num1 * num2);
+        }
+    }
+
+    class childClass : parentClass
+    {
+        public override int operation(int num1, int num2)
+        {
+            return (num1 + num2);
+        }
+    }
+
+
+
+    //Abstraction.......
+    abstract class vechile   //not pure abstraction..
+    {
+        public abstract void maruti();
+        public void honda()
+        {
+            Console.WriteLine("Amaze");
+        }
+    }
+    class car : vechile
+    {
+        public override void maruti()
+        {
+            Console.WriteLine("Dzire");
+        }
+    }
+
+
+    //Interface....
+
+    interface i1
+    {
+         void m1();
+    }
+
+    interface i2
+    {
+        void m1();
+    }
+
+    class interfaceTest : i1, i2
+    {
+        public void m1()
+        {
+            Console.WriteLine("Interface is working...");
+        }
+
+
+        class Program
+        {
+            static void Main(string[] args)
+            {
+                //methodOverLoading
+                overload obj = new overload();
+
+                var twoArgument = obj.add(10, 20);
+                var threeArgument = obj.add(20, 30, 40);
+
+                Console.WriteLine("METHOD OVERLOADING");
+                Console.WriteLine("Adding Two arguments= {0}", twoArgument);
+                Console.WriteLine("Adding Three arguments= {0}", threeArgument);
+
+
+                //methodOverRidding...
+
+                childClass chd = new childClass();
+                parentClass par = new parentClass();
+
+                var ride1 = chd.operation(2, 3);
+
+                var ride2 = par.operation(4, 5);
+
+                Console.WriteLine("\n");
+
+                Console.WriteLine("METHOD OVERRIDING");
+                Console.WriteLine("OverRidding Output Child = {0}", ride1);
+                Console.WriteLine("OverRidding Output Parent = {0}", ride2);
+
+
+                Console.WriteLine("\n");
+
+
+                //abstraction.... 
+
+                Console.WriteLine("Abstraction");
+
+                car mycar = new car();
+                vechile myvechile = mycar;
+
+                mycar.maruti();
+                myvechile.honda();
+
+                Console.WriteLine("\n");
+
+                //interface
+                interfaceTest inter = new interfaceTest();
+
+                inter.m1();
+
+                Console.WriteLine("\n");
+            }
+        }
+
+
+    }
+}
