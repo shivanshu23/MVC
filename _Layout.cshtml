@@ -1,0 +1,143 @@
+﻿@*﻿<!DOCTYPE html>
+    @using System.Data;
+    @using TrainingProject.Models;
+
+    @{
+        var userlogin = Session["user"] as LoginModel;
+    }
+
+
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewBag.Title - My ASP.NET Application</title>
+        <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+        <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="~/Content/LayoutStyle.css" rel="stylesheet" type="text/css" />
+        <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    @Html.ActionLink("Training Project", "LoginScreen", "Login", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                @if (userlogin != null)
+                {
+                    <div class="navbar-brand" id="username_display">
+                        @userlogin.FirstName &nbsp;
+                        <input type="button" id="logout_btn" value="Logout" onclick="window.location='@Url.Action("Logout ", "Index","Login")'" />
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="container body-content">
+            <div style="font-size: 16px">
+                @if (userlogin != null)
+                {
+                    <br><br><br />
+                    <p>
+                        @Html.ActionLink("Categories", " ", "Category") &nbsp;&nbsp;
+                        @Html.ActionLink("Products", "", "Product")
+                    </p>
+                }
+            </div>
+            @RenderBody()
+            <hr />
+        </div>
+        <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+        <script src="~/Scripts/bootstrap.min.js"></script>
+    </body>
+    </html>*@
+
+
+<!DOCTYPE html>
+@using System.Data;
+@using TrainingProject.Models;
+
+@{
+    var userlogin = Session["user"] as LoginModel;
+}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="images/favicon.ico">
+    <title>Training Project</title>
+    <!-- Bootstrap core CSS -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <!-- Icons -->
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="~/Content/style.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container-fluid" style="overflow:hidden">
+        <div class="row">
+            <div class="left-sidebar-new col-sm-1 col-lg-1 col-xl-1 no-padding ">
+                <nav>
+                    <h1 class="site-title logo-left text-center">
+                        <img src="~/Content/images/logo_training.png" class="img-responsive" />
+                    </h1>
+                    <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">
+                        <em class="fa fa-bars"></em>
+                    </a>
+                    <ul class="nav sidebar-nav navbar-fixed-left">
+                        <li class="list-item">@Html.ActionLink("Products", "Listing", "Product")</li>
+                        <li class="list-item">@Html.ActionLink("Categories", "Listing", "Category")</li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-xs-12 col-sm-10 col-lg-10 col-xl-10" id="div-border-right">
+                <main class="ml-auto dashtop-gap dash-main">
+                    <div>
+                        <header class="row">
+                            <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                                <text id="training-heading">Training Project</text>
+                            </div>
+                        </header>
+                        <div class="row">
+                            <div class="col-12">
+                                <nav class="sup-dash">
+                                    <br>
+                                    <br>
+                                    @if (userlogin != null)
+                                    {
+                                        <div class="navbar-brand" id="username_display">
+                                            @userlogin.FirstName &nbsp;
+                                            <a href="@Url.Action("LoginPage", "Login")">
+                                                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    }
+                                </nav>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="white-main-inner">
+                                    <div class="col-md-12">
+                                        @RenderBody()
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </main>
+            </div>
+            <div class="col-xs-12 col-sm-1 col-lg-1 col-xl-1"></div>
+        </div>
+    </div>
+    <!-- Bootstrap core JavaScript -->
+    <script src="~/Scripts/jquery-3.2.1.js"></script>
+    <script src="~/Scripts/popper.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/custom.js"></script>
+</body>
+</html>

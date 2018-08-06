@@ -1,0 +1,16 @@
+﻿#text_link {
+    margin-left: 850px;
+}
+
+#table_head {
+    font-size: medium;
+}
+
+#full_list{
+    margin-left:5px;
+}
+
+#table_style {
+    min-height: 350px;
+    overflow: scroll;
+}
