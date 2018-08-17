@@ -1,0 +1,107 @@
+@using TrainingProject.Models
+@model IEnumerable<TrainingProject.Models.ProductModel>
+@using System.Data;
+@using System.Collections.Generic;
+@using System.Web.Optimization
+
+
+<link rel="stylesheet" type="text/css" href="~/Content/CategoryListStyle.css">
+<link rel="stylesheet" type="text/css" href="~/Content/bootstrap.min.css">
+
+@Scripts.Render("~/bundles/Project_Scripts")
+@Scripts.Render("~/bundles/Bootstrap")
+
+
+<div class="container" id="div_main">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="div_header">
+                <text id="text_header">
+                    <h2>
+                        Product List
+                    </h2>
+                </text>
+                <input type="button" class="btn btn-primary" value="Add new" title="Add New Product" id="text_link" onclick="window.location='@Url.Action("InsertProduct", "Product")'" />
+            </div>
+
+            <div id="search_box">
+                @using (Html.BeginForm("Listing", "Product"))
+                {
+                    <div class="col-md-3"><input name="txtSearch" type="text" class="search-cont" autocomplete="off" id="txtSearch" value="@ViewBag.search" /></div>
+                    <div class="col-md-9">
+                        <input type="submit" id="searchBTN" class="btn" title="Submit" value="Search" />
+                        <input type="submit" value="Show all" id="full_list" class="btn" title="Show all" onclick="window.location='@Url.Action("Listing", "Product")'" />
+                        @ViewBag.SearchMessage
+                    </div>
+                }
+            </div>
+            <br>
+            <br>
+            <div class="table-responsive" id="table_style">
+                <br>
+                <table class="table table-bordered">
+
+                    <tr id="table_head">
+                        <th hidden>Product ID</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Visible Till</th>
+                        <th>Description</th>
+                        <th>IsActive</th>
+                        <th>Created By</th>
+                        <th>Created Date</th>
+                        <th>Modified By</th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th hidden>@item.Product_ID</th>
+                            <td>@item.Product_name</td>
+                            <td>@item.Category</td>
+                            <td>@item.Price</td>
+                            <td>@item.NoOfProducts</td>
+                            <td>@item.VisibleDate.ToString("dd-MMM-yyyy")</td>
+                            <td>@item.Description</td>
+                            @{
+                                if (item.IsActive == true)
+                                {
+                                    <td style="color:darkgreen">
+                                        <h5>Active</h5>
+                                        <p hidden> <b>@item.IsActive</b></p>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td style="color:red">
+                                        <h5>Inactive</h5>
+                                        <p hidden> <b>@item.IsActive</b></p>
+                                    </td>
+                                }
+
+                            }
+                            <td>@item.CreatedUser</td>
+                            <td>@item.CreatedDate.ToString("dd-MMM-yyyy")</td>
+                            <td>@item.ModifiedUser</td>
+
+                            <td>
+                                <text class="link_edit"><a href="@Url.Action("GetProductByID", "Product", new { id = @item.Product_ID })"><i class="fa fa-pencil-square-o" aria-hidden="true" title="Edit"></i></a></text>
+                                <text class="link_delete"><a href="@Url.Action("DeleteProduct", "Product", new {  id = @item.Product_ID })"><i class="fa fa-trash" aria-hidden="true" title="Delete"></i></a></text>
+
+                            </td>
+
+                        </tr>
+                        @TempData["DataNotFound"]
+                    }
+                </table>
+
+                @if (TempData["DataNotFound"] != null)
+                {
+                    <div id="InsertMsg">@TempData["DataNotFound"]</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
