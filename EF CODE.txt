@@ -1,0 +1,92 @@
+CREATE EFCodeFirst solution
+
+add model class
+1st:
+Category
+
+public class category
+{
+	public int CategoryId {get; set;}
+	public string CategoryName {get; set;}
+	public string Description {get; set;}
+
+}
+
+//create another model class
+
+// 2nd: Product
+
+public class product
+{
+	public int productId{get; set;}
+	public string ProductName {get; set; }
+	public sloat Priice {get; set; }
+	public int CategoryId { get; set;}
+}
+
+// model now ready.. now we create context
+// add folder: Context
+// add class in it : ProductContext
+
+
+using System.Data.Entity;
+
+public class ProductContext : DbContext
+{
+	public Dbset<Category> Categories {get ; set;}
+	public Dbset<Product> Products {get; set;}
+}
+
+// we can excess the data from the Dbset
+
+// NOW ADD A CONNECTION STING.  
+// NOTE: YOUR CONNECTION STRING NAME SHOULD BE YOUR CONTEXT NAME
+
+1. REname DefaultConnection to ProductContext 
+2. type = sql connection path
+
+// configure datasource and data base name
+
+// go to app_data
+add new item... SQl Server Database(Name = EFCodeFirst).. Add...
+
+Open added Database.
+open web.config...
+
+rename file to EFCodeFirst before Integreated security true
+
+in connection string
+
+// create controller... name: Product
+
+using EFCodeFirst.Context;
+public ActionResult Index()
+{
+	ProductContext context = new ProductContext();
+	var products = context.Product.ToList();
+	
+	return view(products );
+}
+
+
+//create view.. Template:List... MOdel specify.
+
+create category controller... do the same;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
