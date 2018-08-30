@@ -1,0 +1,169 @@
+using System.Collections.Generic;
+using System.Web.Mvc;
+using TrainingProject.Models;
+using System.Data;
+using System.Linq;
+using System;
+
+namespace TrainingProject.Controllers
+{
+    [AuthorizationFilter]
+    public class ProductController : Controller
+    {
+        RHPMEntities dbModel = new RHPMEntities();
+        public ActionResult Listing(FormCollection collection)
+        {
+            string searchName = collection["txtSearch"];
+            ViewBag.search = searchName;
+
+            var listQuery = from c in dbModel.Training_Products
+                            join createdUser in dbModel.Training_LoginTable
+                            on c.CreatedBy equals createdUser.UserID
+                            into createname
+                            from p in createname.DefaultIfEmpty()
+                            join modifiedUser in dbModel.Training_LoginTable
+                            on c.ModifiedBy equals modifiedUser.UserID
+                            into modifyname
+                            from p1 in modifyname.DefaultIfEmpty()
+                            select new { product = c, createdUser = p.Username, modifiedBy = p1.Username };
+
+            if (searchName != null)
+            {
+                listQuery = listQuery.Where(x => x.product.Prod_Name.Contains(searchName) || x.product.Product_Description.Contains(searchName));
+            }
+
+            var Productlist = listQuery.ToList();
+            List<ProductModel> viewList = new List<ProductModel>();
+            foreach (var item in Productlist)
+            {
+                ProductModel model = new ProductModel();
+                model.Product_ID = item.product.Product_ID;
+                model.Product_name = item.product.Prod_Name;
+                model.CategoryID = item.product.CategoryID;
+                model.Price = item.product.Price;
+                model.NoOfProducts = item.product.CreatedBy;
+                model.VisibleDate = item.product.Visible_Till;
+                model.Description = item.product.Product_Description;
+                model.IsActive = item.product.IsActive;
+                model.CreatedBy = item.product.CreatedBy;
+                model.CreatedUser = item.createdUser;
+                model.CreatedDate = item.product.CreatedDate;
+                model.ModifiedUser = item.modifiedBy;
+
+                viewList.Add(model);
+            }
+            if (Productlist.Count == 0)
+            {
+                TempData["DataNotFound"] = "No records found.";
+            }
+            return View("ProductListing", viewList);
+        }
+
+        [HttpGet]
+        public ActionResult InsertProduct(Training_Products prop)
+        {
+            GetCategories();
+            ViewBag.Message = "Insert Product";
+
+            return View("ProductInsert");
+        }
+
+        [HttpPost]
+        public ActionResult InsertUpdateProduct(ProductModel prop)
+        {
+            var userlogin = Session["user"] as LoginModel;
+            if (prop.Product_ID == 0)
+            {
+                Training_Products products = new Training_Products()
+                {
+                    Prod_Name = prop.Product_name,
+                    Price = prop.Price,
+                    No_Of_Products = prop.NoOfProducts,
+                    CategoryID = prop.CategoryID,
+                    Visible_Till = prop.VisibleDate,
+                    Product_Description = prop.Description,
+                    IsActive = prop.IsActive,
+                    CreatedBy = userlogin.UserID,
+                    CreatedDate = DateTime.Now
+                };
+
+                dbModel.Training_Products.Add(products);
+                dbModel.SaveChanges();
+                prop.CreatedUser = userlogin.Username;
+                TempData["DataInsertorUpdateMessage"] = "Product Added.";
+            }
+            else
+            {
+                var EditQwery = dbModel.Training_Products.Where(x => x.Product_ID == prop.Product_ID).FirstOrDefault();
+                EditQwery.Prod_Name = prop.Product_name;
+                EditQwery.CategoryID = prop.CategoryID;
+                EditQwery.Price = prop.Price;
+                EditQwery.No_Of_Products = prop.NoOfProducts;
+                EditQwery.Visible_Till = prop.VisibleDate;
+                EditQwery.Product_Description = prop.Description;
+                EditQwery.IsActive = prop.IsActive;
+                EditQwery.ModifiedBy = userlogin.UserID;
+                EditQwery.ModifiedDate = DateTime.Now;
+                dbModel.SaveChanges();
+                prop.ModifiedUser = userlogin.Username;
+
+                TempData["DataInsertorUpdateMessage"] = "Product Updated.";
+            }
+            return View("ProductInsert", prop);
+        }
+
+        public void GetCategories()
+        {
+            List<SelectListItem> Categories = new List<SelectListItem>();
+            Categories.Add(
+                new SelectListItem
+                {
+                    Value = "68",
+                    Text = "first"
+                });
+
+            TempData["Categories"] = Categories;
+            TempData.Keep();
+        }
+
+        [HttpGet]
+        public ActionResult GetProductByID(int? id)
+        {
+            if (id != null)
+            {
+                ProductModel prop = new ProductModel();
+                var EditProduct = dbModel.Training_Products.Where(x => x.Product_ID == id).FirstOrDefault();
+                if (EditProduct != null)
+                {
+                    prop.Product_ID = EditProduct.Product_ID;
+                    prop.Product_name = EditProduct.Prod_Name;
+                    prop.CategoryID = EditProduct.CategoryID;
+                    prop.Price = EditProduct.Price;
+                    prop.NoOfProducts = EditProduct.No_Of_Products;
+                    prop.VisibleDate = EditProduct.Visible_Till;
+                    prop.Description = EditProduct.Product_Description;
+                    prop.IsActive = EditProduct.IsActive;
+                    prop.CreatedBy = EditProduct.CreatedBy;
+                    prop.CreatedDate = EditProduct.CreatedDate;
+                }
+
+                ViewBag.Message = "Update Product";
+                GetCategories();
+
+                return View("ProductInsert", prop);
+            }
+            return View("ProductInsert");
+        }
+        public ActionResult DeleteProduct(int ID)
+        {
+            var delete = dbModel.Training_Products.Where(x => x.Product_ID == ID).ToList();
+            foreach (var item in delete)
+            {
+                dbModel.Training_Products.Remove(item);
+            }
+            dbModel.SaveChanges();
+            return RedirectToAction("Listing");
+        }
+    }
+}
+
