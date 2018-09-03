@@ -1,0 +1,51 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using TrainingProject.Models;
+
+namespace TrainingProject.Controllers
+{
+    public class RegisterUserController : Controller
+    {
+        DatabaseEntities db = new DatabaseEntities();
+        [HttpGet]
+        public ActionResult RegisterUser()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public ActionResult RegisterUser(Training_LoginTable loginUser)
+        {
+            string fileName = Path.GetFileNameWithoutExtension(loginUser.ImageFile.FileName);
+            string extension = Path.GetExtension(loginUser.ImageFile.FileName);
+
+            fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+            loginUser.ImagePath = "~/Content/Dp/" + fileName;
+            fileName = Path.Combine(Server.MapPath("~/Content/Dp/"), fileName);
+            loginUser.ImageFile.SaveAs(fileName);
+
+            db.Training_LoginTable.Add(loginUser);
+            db.SaveChanges();
+
+            ModelState.Clear();
+
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult Index(int id)
+        {
+            Training_LoginTable image = new Training_LoginTable();
+            
+                image = db.Training_LoginTable.Where(x => x.UserID == id).FirstOrDefault();
+            
+
+            return View("Index","Dashboard",image);
+
+        }
+    }
+}
