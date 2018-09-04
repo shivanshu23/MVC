@@ -1,0 +1,69 @@
+$(document).ready(function () {
+    $('form').submit(function (e) {
+        
+        var FirstName = $('#FName').val();
+        var LastName = $('#LName').val();
+        var Username = $('#UserName').val();
+        var Password = $('#Password').val();
+        //var Image = $('#img').val();
+
+        var name_regex = /^[A-Za-z_ ]+$/;
+        var user_regex = /^[a-zA-Z0-9]+$/;
+        var PasswordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
+        //var ImageRegex = /([a-zA-Z0-9\s_\\.\-:])+(.png|.jpg|.gif)$/;
+
+        if (FirstName.length < 1 || !FirstName.match(name_regex)) {
+            $('#fname').show();
+            ischeck = true;
+            e.preventDefault();
+        }
+        else {
+            $('#fname').hide();
+            ischeck = false;
+        }
+
+        if (LastName.length < 1 || !LastName.match(name_regex)) {
+            $('#lname').show();
+            ischeck = true;
+            e.preventDefault();
+        }
+        else {
+            $('#lname').hide();
+            ischeck = false;
+        }
+
+        if (Username.length < 1 || !Username.match(user_regex)) {
+            $('#username').show();
+            ischeck = true;
+            e.preventDefault();
+        }
+        else {
+            $('#username').hide();
+            ischeck = false;
+        }
+
+        if (!Password.match(PasswordRegex)) {
+            $('#password').show();
+            ischeck = true;
+            e.preventDefault();
+        }
+        else {
+            $('#password').hide();
+            ischeck = false;
+        }
+
+        //if (!Image.match(ImageRegex)) {
+        //    $('#image').show();
+        //    ischeck = true;
+        //    e.preventDefault();
+        //}
+        //else {
+        //    $('#image').hide();
+        //    ischeck = false;
+        //}
+        
+        if (ischeck == true) {
+            e.preventDefault();
+        }
+    });
+});

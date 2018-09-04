@@ -1,0 +1,112 @@
+@model TrainingProject.Models.Training_LoginTable
+
+@{
+    ViewBag.Title = "RegisterUser";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/RegisterUser.js"></script>
+<script src="~/Scripts/JCrop.js"></script>
+@*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.4/css/Jcrop.css"></script>*@
+<script src="~/Scripts/FileCrop.js"></script>
+
+
+<h2>RegisterUser</h2>
+
+@using (Html.BeginForm("RegisterUser", "RegisterUser", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group" hidden>
+            @Html.EditorFor(x => x.UserID, new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.FirstName, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(x => x.FirstName, new { htmlAttributes = new { @class = "form-control", autocomplete = "off", id = "FName" } })
+                <span hidden class="error" id="fname">Please Enter a Valid Name</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.LastName, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(x => x.LastName, new { htmlAttributes = new { @class = "form-control", autocomplete = "off", id = "LName" } })
+                <span hidden class="error" id="lname">Please Enter a Valid Name</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.Username, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(x => x.Username, new { htmlAttributes = new { @class = "form-control", autocomplete = "off", id = "UserName" } })
+                <span hidden class="error" id="username">Please Enter a Valid Name</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.Password, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(x => x.Password, new { htmlAttributes = new { @class = "form-control", type = "password", id = "Password" } })
+                <span hidden class="error" id="password">Password should contain atleast one number and one special character"</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.ImagePath, new { @class = "control-label col-md-2", autocomplete = "off" })
+            <div class="col-md-10">
+                <input type="file" name="ImageFile" id="FileUpload1" />
+            </div>
+        </div>
+
+        <table border="0" cellpadding="0" cellspacing="5">
+            <tr>
+                <td>
+                    <img id="Image1" src="" alt="" style="display: none" />
+                </td>
+                <td>
+                    <canvas id="canvas" height="10" width="10"></canvas>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <div>
+            <input type="button" id="btnCrop" value="Crop" class="btn btn-default" />
+            <input type="submit" id="btnUpload" value="Upload" class="btn btn-default" />
+
+            <input type="hidden" name="imgX1" id="imgX1" />
+            <input type="hidden" name="imgY1" id="imgY1" />
+            <input type="hidden" name="imgWidth" id="imgWidth" />
+            <input type="hidden" name="imgHeight" id="imgHeight" />
+            <input type="hidden" name="imgCropped" id="imgCropped" />
+        </div>
+
+        @*<div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+
+
+                    <input type="button" id="btnCrop" value="Crop" />
+                    <input type="submit" value="Create User" id="btnUpload" class="btn btn-default" />
+                    <button type="reset" class="btn btn-default" id="reset_btn">Reset </button>
+
+                    <input type="hidden" name="imgX1" id="imgX1" />
+                    <input type="hidden" name="imgY1" id="imgY1" />
+                    <input type="hidden" name="imgWidth" id="imgWidth" />
+                    <input type="hidden" name="imgHeight" id="imgHeight" />
+                    <input type="hidden" name="imgCropped" id="imgCropped" />
+
+                </div>
+            </div>*@
+    </div>
+}
+<div>
+    <h3>
+        @Html.ActionLink("Back to List", "Login", "Login")
+    </h3>
+</div>
+
+
+
